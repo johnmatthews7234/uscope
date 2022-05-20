@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block header %}
+<h1>{% block title %}List Google Maps Places{% endblock %}</h1>
+{% endblock %}
+
+
+
+{% block content %}
+
+
+<div id="loading"><h2>... LOADING ...</h2></div>
+<div id="content"></div>
+
+<h2>Downloads</h2>
+<ul>
+    <li>Downloads</li>
+    <li>Will go here</li>
+    <li>eventually.</li>
+</ul>
+
+<table style="width:100%">
+<tr><td>Address: </td><td>{{ record['pointaddress'] }}</td></tr>
+<tr><td>Keywords: </td><td>{{ record['searchterms'] }}</td></tr>
+<tr><td>Radius: </td><td>{{ record['radius'] }}</td></tr>
+</table>
+
+<table style="width:100%">
+    <tr>
+        <th>Name</th>
+        <th>Address</th>
+        <th>website</th>
+    </tr>
+    {% for place in placelist %}
+        <tr>
+            <td>{{ place['placename'] }}</td>
+            <td>{{ place['vicinity'] }}</td>
+            <td><a href="{{ place['website'] }}">{{ place['website'] }}</a></td>
+        </tr>
+    {% endfor %}
+</table>
+</div>
+<script type="text/javascript">
+    function preloader(){
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("content").style.display = "block";
+    }
+    window.onload = preloader;
+</script>
+
+{% endblock %}

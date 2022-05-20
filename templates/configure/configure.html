@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block header %}
+<h1>{% block title %}Configure this thing{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+<h2><a href="./add">Add a value</a></h2>
+<form method="POST">
+<table style="width:100%">
+<tr>
+    <th>Name</th>
+    <th>Value</th>
+    <th>Delete</th>
+</tr>
+{% for config in configs %}
+<tr>
+    <td>{{ config['keyname'] }}</td>
+    <td><input type="text" id="{{ config['keyname'] }}" name="{{ config['keyname'] }}" value="{{ config['keyvalue'] }}"></td>
+    <td><a href="./delete/{{ config['keyname'] }}">Delete</a></td>
+</tr>
+{% endfor %}
+</table>
+<input value="Save" type="submit" />
+</form>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block header %}
+<h1>{% block title %}Search Google Maps{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<div id="searchform">
+<form method="POST">
+    <label for="address">Address</label>
+    <input name="address" id="address" required />
+    <label for="keyword">Key word</label>
+    <input name="keyword" id="keyword" required />
+    <label for="radius">Radius</label>
+    <input name="radius" id="radius" type="number" max="5000" min="50" value="1000" />
+    <input value="Search" type="submit" onclick="displaysearching()" />
+</form>
+</div>
+<div id="searching" style="display: none;"><h2>Yeah...  I be doin' my thing now.  You wait right there.  Ya hear?</h2></div>
+<script>
+    function displaysearching() {
+        var showid = document.getElementById("searching")
+        var hideid = document.getElementById("searchform");
+        showid.style.display = "block";
+        hideid.style.display = "none";
+        return true;
+    }
+</script>
+{% endblock %}

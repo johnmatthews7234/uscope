@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block header %}
+<h1>{% block title %}Add a value{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+<h2>Add a value</h2>
+<form method="POST">
+<table style="width:100%">
+<tr>
+    <th>Name</th>
+    <th>Value</th>
+</tr>
+<tr>
+    <td><input type="text" id="keyname" name="keyname"></td>
+    <td><input type="text" id="keyvalue" name="keyvalue"></td>
+</tr>
+</table>
+<input value="Save" type="submit" />
+</form>
+{% endblock %}  
+
