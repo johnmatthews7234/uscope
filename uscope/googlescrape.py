@@ -3,7 +3,7 @@ from .models import PlaceGoogle, JobList, Place,  JobResults
 from .db import db_session
 from .helper import get_api_key, data_from_url, add_keyword_to_place, get_refresh_place_days
 from time import sleep
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import urllib.parse
 from openlocationcode import openlocationcode
 from sqlalchemy import func
@@ -168,7 +168,7 @@ class googleplace:
         if (self.googleplacerecord is None) or self.refresh:
             self._get_json()
         self.get_placeid()
-        if self.placerecord.lastchecked is None or self.placerecord.lastchecked < datetime.today() - timedelta(days = get_refresh_place_days()):
+        if self.placerecord.lastchecked is None or self.placerecord.lastchecked < date.today() - timedelta(days = get_refresh_place_days()):
             self.refresh = True
             self._get_json()
         self.get_googleplaceid()
