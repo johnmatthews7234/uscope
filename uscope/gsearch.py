@@ -1,8 +1,13 @@
 import threading
-from flask import Blueprint, flash, redirect, render_template, request
+import io
+from flask import Blueprint, flash, redirect, render_template, request, send_file
+from werkzeug.exceptions import abort
+from json_excel_converter import Converter
+from json_excel_converter.xlsx import Writer
 from .models import JobList, JobResults, Place, PlaceGoogle
 from .db import db_session
 from .googlescrape import street_address_to_lat_lng, google_search
+from .reports import rawreport
 
 
 bp = Blueprint('gsearch', __name__, url_prefix='/gsearch')
@@ -78,6 +83,28 @@ def get_job_place_list(job_number):
         place_record['website'] = google_record.website
         output.append(place_record)
     return output
+
+@bp.route('/download/<int:job_number>', methods=('GET',))
+def download_report(job_number):
+    error = None
+    job = JobList.query.filter(JobList.id == job_number).first()
+    if job is None:
+        error = 'Could not find that job.'
+        abort(404, error)
+
+    #proxyIO = io.StringIO()
+    mem = io.BytesIO()
+    data = rawreport(job_number).create_report()
+    converter = Converter()
+    converter.convert(data, Writer(mem))
+    mem.seek(0)
+    return_file = send_file(mem, attachment_filename='uscope.xlsx', as_attachment=True, cache_timeout=0)
+    return_file.mimetype = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    return return_file
+
+
+
+        
     
 
     
