@@ -8,7 +8,7 @@ import urllib.parse
 from openlocationcode import openlocationcode
 from sqlalchemy import func
 
-apikey = get_api_key('googleapikey')
+apikey = get_key('googleapikey')
 url = 'https://maps.googleapis.com/maps/api'
 business_status_dict = {
     'OPERATIONAL': 1,
