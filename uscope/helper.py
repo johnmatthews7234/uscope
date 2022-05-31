@@ -15,7 +15,7 @@ def data_from_url(full_url):
     json_data = json.loads(response.read())
     return json_data
 
-def get_api_key(key_name):
+def get_key(key_name):
     ck = ConfigKeys.query.filter(ConfigKeys.keyname == key_name).first()
     if ck is not None:
         return ck.keyvalue
@@ -34,6 +34,7 @@ def get_refresh_place_days():
         db_session.add(my_record)
         db_session.commit()
     return int(refresh_place_days.keyvalue)
+
 
 
 
