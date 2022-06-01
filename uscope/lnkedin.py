@@ -14,8 +14,8 @@ class linkedin_search:
     
     def __init__(self, company_name, url ):
         self.login()
-        for company in search_company(company_name):
-            urllist = get_company_url(company)
+        for company in self.search_company(company_name):
+            urllist = self.get_company_url(company)
 
     def login(self):
         if self.logged_in:
@@ -46,18 +46,19 @@ class linkedin_search:
         company_filter = driver.find_element(By.XPATH, '//button[text()="Companies"]')
         company_filter.click()
         soup = BeautifulSoup(driver.page_source)
-        soup.findall('div',class='entity-result')
+        for elem in soup.findall('div', class_='entity-result'):
+            pass
 
 
     #Now for beautiful soup.
 
 
-
+'''
     grab list of companies
     for company in list
         grab url
     use fuzzywuzzy for picking the closest url aove 80%
     populate company linkedin data_from_url
-
+'''
 
 
