@@ -21,10 +21,16 @@ def get_key(key_name):
         return ck.keyvalue
     else:
         return ""
-    
-def add_keyword_to_place(keyword, placeid):
-    my_keyword_record = KeyWords(placeid, keyword)
+
+def set_key(key_name, key_value):
+    ck = ConfigKeys.query.filter(ConfigKeys.keyname == key_name).first()
+    if ck is not None:
+        ck.keyvalue = str(key_value)
+    else:
+        ck = ConfigKeys(str(key_name), str(key_value))
+        db_session.add(ck)
     db_session.commit()
+
 
 def get_refresh_place_days():
     refresh_place_days = ConfigKeys.query.filter(ConfigKeys.keyname == 'refreshplacedays').first()
