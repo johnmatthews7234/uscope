@@ -46,9 +46,10 @@ class linkedin_search:
         company_filter = driver.find_element(By.XPATH, '//button[text()="Companies"]')
         company_filter.click()
         soup = BeautifulSoup(driver.page_source)
+        urns = []
         for elem in soup.findall('div', class_='entity-result'):
-            pass
-
+            urns.append(elem['data-chameleon-result-urn'])
+        return urns
 
     #Now for beautiful soup.
 
@@ -60,5 +61,3 @@ class linkedin_search:
     use fuzzywuzzy for picking the closest url aove 80%
     populate company linkedin data_from_url
 '''
-
-

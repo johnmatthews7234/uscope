@@ -1,7 +1,7 @@
 from datetime import datetime
 from .models import PlaceGoogle, JobList, Place,  JobResults
 from .db import db_session
-from .helper import get_api_key, data_from_url, add_keyword_to_place, get_refresh_place_days
+from .helper import get_key, data_from_url, add_keyword_to_place, get_refresh_place_days
 from time import sleep
 from datetime import datetime, timedelta, date
 import urllib.parse
