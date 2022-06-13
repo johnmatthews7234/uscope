@@ -1,11 +1,7 @@
 from datetime import datetime
 from .models import PlaceGoogle, JobList, Place,  JobResults
 from .db import db_session
-<<<<<<< HEAD
-from .helper import get_key, data_from_url, add_keyword_to_place, get_refresh_place_days
-=======
-from .helper import get_key, data_from_url, get_refresh_place_days
->>>>>>> 8c03ee5b1b275022f13e919cabff523e8c67a7d6
+from .helper import get_key, data_from_url, get_refresh_place_days, add_keyword_to_place
 from time import sleep
 from datetime import datetime, timedelta, date
 import urllib.parse
