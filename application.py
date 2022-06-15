@@ -1,10 +1,11 @@
 import os
 from flask import Flask, session
+from flask_user import UserManager
+#from flask.ext.session import Session
 
 import uscope.gsearch
 import uscope.configure
-
-
+from uscope.models import User
 
 def create_app(test_config=None):
     app = Flask(__name__)
@@ -20,12 +21,16 @@ def create_app(test_config=None):
         pass
 
     from uscope.db import db_session
+
+    user_manager = UserManager(app, db_session, User)
+    
     @app.route('/')
     def hello_world():
         return "<p>uScope is running</p>"
 
     app.register_blueprint(uscope.gsearch.bp)
     app.register_blueprint(uscope.configure.bp)
+    #app.register_blueprint(uscope.sessions.bp)
     
     @app.teardown_appcontext
     def shutdown_session(exception=None):
@@ -35,5 +40,6 @@ def create_app(test_config=None):
 if __name__ == "__main__":
     app = create_app()
     app.debug = True
+    
     app.run()
 
