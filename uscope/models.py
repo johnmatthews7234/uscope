@@ -143,4 +143,11 @@ class UserRoles(Base):
     role_id = Column(Integer, ForeignKey('roles.id', ondelete='CASCADE'))
 
 
+class LinkedInTokens(Base):
+    __tablename__ = 'linkedin_tokens'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'))
+    token = Column(String(1000))
+    expires = Column(DateTime())
 
+ 
