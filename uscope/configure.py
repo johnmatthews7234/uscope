@@ -1,7 +1,5 @@
-from crypt import methods
-from sqlite3 import DatabaseError
+
 from flask import Blueprint, flash, redirect, render_template, request
-from sqlalchemy import values
 from .models import ConfigKeys
 from .db import db_session
 
@@ -28,7 +26,7 @@ def delete(keyname):
     db_session.delete(config_record)
     db_session.commit
     flash('Config key deleted.')
-    redirect('/')
+    redirect('/config')
 
 @bp.route('/add', methods=('GET','POST',))
 def add():
@@ -36,7 +34,8 @@ def add():
     if request.method == 'POST':
         if ConfigKeys.query.filter(ConfigKeys.keyname == request.form['keyname']).first() is None:
             db_session.add(ConfigKeys(request.form['keyname'], request.form['keyvalue']))
-        return configure()
+            db_session.commit()
+        return redirect('/config')
     return  render_template('/configure/add.html')
     
     
