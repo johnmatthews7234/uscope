@@ -1,6 +1,7 @@
 import os
 from flask import Flask, session
 from flask_user import UserManager
+from flask_sqlalchemy import SQLAlchemy
 #from flask.ext.session import Session
 
 import uscope.gsearch
@@ -22,7 +23,7 @@ def create_app(test_config=None):
 
     from uscope.db import db_session
 
-    user_manager = UserManager(app, db_session, User)
+    user_manager = UserManager(app, SQLAlchemy(app), UserClass=User)
     
     @app.route('/')
     def hello_world():
