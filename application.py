@@ -1,5 +1,5 @@
 import os
-from flask import Flask, session
+from flask import Flask, session, render_template
 from flask_user import UserManager
 from flask_sqlalchemy import SQLAlchemy
 #from flask.ext.session import Session
@@ -27,7 +27,7 @@ def create_app(test_config=None):
     
     @app.route('/')
     def hello_world():
-        return "<p>uScope is running</p>"
+        return render_template('index.html')
 
     app.register_blueprint(uscope.gsearch.bp)
     app.register_blueprint(uscope.configure.bp)
