@@ -21,3 +21,4 @@ class rawreport:
             del place_record['_sa_instance_state']
             output.append(OrderedDict((k, place_record[k]) for k in xl_order))
         return output
+
