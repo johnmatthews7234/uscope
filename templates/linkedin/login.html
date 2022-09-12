@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block header %}
+<h1>{% block title %}Login to LinkedIn{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<p>Because John is doing weird stuff with linkedin, your logon is a little messy.  uScope will save your username and password to linkedin as well as create an API token.  This allows the system to pretend that it is you in two unique ways.</p>
+<form method="POST">
+    <label for="li_un">LinkedIn Username</label>
+    <input name="li_un" id="li_un" required>
+    <label for="li_pw">LinkedIn Password</label>
+    <input type="password" name="li_pw" id="li_pw" required>
+</form>
+{% endblock %}
