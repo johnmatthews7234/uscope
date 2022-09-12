@@ -149,5 +149,12 @@ class LinkedInTokens(Base):
     user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'))
     token = Column(String(1000))
     expires = Column(DateTime())
+    username = Column(String(255))
+    password = Column(String(100))
+
+    def __init__(self, user_id, token=None, expires=None, username=None, password=None):
+        pass
+
+
 
  
