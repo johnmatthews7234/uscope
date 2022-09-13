@@ -51,9 +51,9 @@ def gsearch():
             google_thread = threading.Thread(target=my_google_search.get_place_id_list, kwargs={'job_number': job_id})
             google_thread.start()
             job_dict['count'] = len(google_place_list)
+            my_job.placecount = len(google_place_list)
         except Exception as e:
             error = str(e)
-        my_job.placecount = len(google_place_list)
         my_job.complete = False
         db_session.commit()
         if error is None:
