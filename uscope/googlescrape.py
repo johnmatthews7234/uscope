@@ -131,7 +131,7 @@ class google_search:
             return []
         return self.googleidlist
 
-    def get_place_id_list(self, job_number=0):
+    def get_place_id_list(self, job_number=0, filter=False):
         if len(self.placeidlist) > 0:
             return self.placeidlist
         for googleid in self.googleidlist:
@@ -139,7 +139,10 @@ class google_search:
             mygoogleplace.get_googleplaceid()
             self.placeidlist.append(mygoogleplace.get_placeid())
             mygoogleplace.set_categories()
-            mygoogleplace.set_jobnumber(job_number)
+            if (filter and
+                    mygoogleplace.googleplacerecord.website != '' and 
+                    mygoogleplace.placerecord.phonenumber != ''):
+                mygoogleplace.set_jobnumber(job_number)
         myjob = JobList.query.filter(JobList.id == job_number).first()
         myjob.complete = True
         db_session.commit()
@@ -249,7 +252,7 @@ class googleplace:
             restaurantstate = _get_address_component(address_components, 'administrative_area_level_1')
             postcode = _get_address_component(address_components, 'postal_code')
             vicinity = street1 + ', ' + suburb + ' ' + restaurantstate + ', ' + postcode
-            phonenumber = '+61000000000'
+            phonenumber = ''
             pluscode = self.get_pluscode()
             if 'international_phone_number' in aresult:
                 phonenumber = aresult['international_phone_number'].replace(' ', '')
