@@ -1,7 +1,8 @@
 /venv/*
+/venv1/*
 /__pycache__/*
 /uscope/__pycache__/*
 config.py
 /.vscode/*
 *.pyc
-instance/uscope.sqlite
+/instance/uscope.sqlite
