@@ -3,18 +3,19 @@ from crypt import methods
 from datetime import datetime, timedelta
 from urllib import request
 from urllib.parse import urldefrag
-from flask import Blueprint, redirect, flash, request, render_template
+from flask import Blueprint, redirect, flash, request, render_template, current_app
 from flask_user import current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from uscope.models import LinkedInTokens
-from ..helper import data_from_url, get_key
+from ..helper import data_from_url, get_key, log
 from ..db import db_session
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 from flask_user import current_user
-from linkedin.linkedin import LinkedInAuthentication, LinkedInApplication, PERMISSIONS
+#from linkedin.linkedin import LinkedInAuthentication, LinkedInApplication, PERMISSIONS
 import requests
 import urllib
 import json
@@ -26,6 +27,7 @@ bp = Blueprint('linkedin', __name__, url_prefix='/linkedin')
 @bp.route('getcode', methods=('GET', 'POST',))
 @login_required
 def send_code_request():
+    log('hello world')
     if request.method == 'GET':
         return render_template('/linkedin/login.html')
     if not test_login(request.form['li_un'],request.form['li_pw']):
@@ -126,14 +128,16 @@ class linkedin_search:
             urns.append(elem['data-chameleon-result-urn'])
         return urns
 
-
+'''
     def pick_closest_company(urnlist):
-        urn_text = ','.join(urnlist):
+        urn_text = ','.join(urnlist)
         GET https://api.linkedin.com/rest/organizationBrandsLookup?ids=List(5025865,35625943)
     #Now for beautiful soup.
 
 
-'''
+
+
+
     grab list of companies
     for company in list
         grab url

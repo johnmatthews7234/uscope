@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 import uscope.gsearch
 import uscope.configure
+import uscope.linkedin.lnkedin
 from uscope.models import User
 
 def create_app(test_config=None):
@@ -31,7 +32,8 @@ def create_app(test_config=None):
 
     app.register_blueprint(uscope.gsearch.bp)
     app.register_blueprint(uscope.configure.bp)
-    #app.register_blueprint(uscope.sessions.bp)
+    app.register_blueprint(uscope.linkedin.lnkedin.bp)
+
     
     @app.teardown_appcontext
     def shutdown_session(exception=None):
@@ -41,6 +43,5 @@ def create_app(test_config=None):
 if __name__ == "__main__":
     app = create_app()
     app.debug = True
-    
     app.run()
 

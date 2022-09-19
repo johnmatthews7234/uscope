@@ -1,4 +1,3 @@
-from ast import keyword
 from sqlalchemy import Column, ForeignKey, Integer, String, Float, Boolean, Date, DateTime
 from sqlalchemy.orm import declarative_base, relationship
 from flask_user import UserMixin
@@ -153,7 +152,11 @@ class LinkedInTokens(Base):
     password = Column(String(100))
 
     def __init__(self, user_id, token=None, expires=None, username=None, password=None):
-        pass
+        self.user_id = user_id
+        self.token = token
+        self.expires = expires
+        self.username = username
+        self.password = password
 
 
 
