@@ -29,7 +29,7 @@ def gsearch():
         job_dict['address'] = address
         job_dict['radius'] = radius
         job_dict['placelist'] = []
-        
+        filter = request.form['filter'] == True
         job_dict['count'] = 0
         my_job = JobList(pointaddress=address, radius=radius, placecount=0, searchterms=keyword)
         db_session.add(my_job)
@@ -48,7 +48,7 @@ def gsearch():
         try:
             my_google_search = google_search(address, radius,keyword)
             google_place_list = my_google_search.get_google_id_list()
-            google_thread = threading.Thread(target=my_google_search.get_place_id_list, kwargs={'job_number': job_id})
+            google_thread = threading.Thread(target=my_google_search.get_place_id_list, kwargs={'job_number': job_id, 'filter' : filter})
             google_thread.start()
             job_dict['count'] = len(google_place_list)
             my_job.placecount = len(google_place_list)
