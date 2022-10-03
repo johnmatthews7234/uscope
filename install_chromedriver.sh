@@ -12,5 +12,10 @@ cdver=$(cat LATEST_RELEASE_$chromever)
 sudo wget https://chromedriver.storage.googleapis.com/$cdver/chromedriver_linux64.zip
 sudo unzip chromedriver_linux64.zip
 sudo mv chromedriver /usr/bin/chromedriver
+<<<<<<< HEAD
 sudo rm /tmp/chromedriver_linux64.zip
 chromedriver --version
+=======
+chromedriver --version
+rm /tmp/chromedriver_linux64.zip
+>>>>>>> 5a9dfa02d181fa193322782ba7822ac8c3bf5ce2
