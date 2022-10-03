@@ -29,7 +29,7 @@ def gsearch():
         job_dict['address'] = address
         job_dict['radius'] = radius
         job_dict['placelist'] = []
-        filter = request.form['filter'] == True
+        filter = request.form.get('filter') == True
         job_dict['count'] = 0
         my_job = JobList(pointaddress=address, radius=radius, placecount=0, searchterms=keyword)
         db_session.add(my_job)
