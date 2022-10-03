@@ -2,11 +2,13 @@ import os
 from flask import Flask, session, render_template
 from flask_user import UserManager
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import MetaData
 #from flask.ext.session import Session
 
 import uscope.gsearch
 import uscope.configure
 import uscope.linkedin.lnkedin
+import uscope.db
 from uscope.models import User
 
 def create_app(test_config=None):
@@ -23,9 +25,11 @@ def create_app(test_config=None):
         pass
 
     from uscope.db import db_session
-
+    metadata = MetaData(uscope.db.engine)
+    metadata.create_all()
     user_manager = UserManager(app, SQLAlchemy(app), UserClass=User)
     
+
     @app.route('/')
     def hello_world():
         return render_template('index.html')
