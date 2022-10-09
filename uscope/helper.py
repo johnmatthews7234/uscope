@@ -1,8 +1,8 @@
 from urllib import response
 import urllib.request
 import json
-
 from flask import request, current_app
+
 from .db import db_session
 from .models import ConfigKeys, KeyWords
 
@@ -42,13 +42,12 @@ def get_refresh_place_days():
     return int(refresh_place_days.keyvalue)
 
 def log(log_text, level='debug'):
-    match level:
-        case 'debug':
-            current_app.logger.debug(log_text)
-        case 'info':
-            current_app.logger.info(log_text)
-        case other:
-            current_app.logger.debug(f'{level} is not a logging level.  {log_text}')
+    if level == 'debug':
+        current_app.logger.debug(log_text)
+    elif level == 'info':
+        current_app.logger.info(log_text)
+    else:
+        current_app.logger.debug(f'{level} is not a logging level.  {log_text}')
 
 
     
