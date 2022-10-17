@@ -1,12 +1,14 @@
 from datetime import datetime
-from .models import PlaceGoogle, JobList, Place,  JobResults
-from .db import db_session
-from .helper import get_key, data_from_url, get_refresh_place_days
 from time import sleep
 from datetime import datetime, timedelta, date
 import urllib.parse
 from openlocationcode import openlocationcode
 from sqlalchemy import func
+
+from .models import PlaceGoogle, JobList, Place,  JobResults
+from .db import db_session
+from .helper import get_key, data_from_url, get_refresh_place_days
+
 
 apikey = get_key('googleapikey')
 url = 'https://maps.googleapis.com/maps/api'
@@ -274,16 +276,6 @@ class googleplace:
         if self.googleplaceid > 0:
             self.googleplacerecord.placeid = self.placeid
             db_session.commit()
-
-
-    def set_categories(self):
-        if self.myjson is None:
-            self.get_place_details()
-            types = self.myjson['result']['types']
-            for mytype in types:
-                add_keyword_to_place(self.get_placeid(), mytype)
-
-    
 
     def get_placename(self):
         return self.placerecord.placename

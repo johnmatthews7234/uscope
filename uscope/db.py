@@ -12,6 +12,9 @@ Base = declarative_base()
 Base.query = db_session.query_property()
 
 def init_db():
-    import models
+    from ..config import DATABASE as dbstring
     Base.metadata.create_all(bind=engine)
+
+if __name__ == "__main__":
+    init_db()
 

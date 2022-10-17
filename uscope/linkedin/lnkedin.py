@@ -6,10 +6,6 @@ from urllib.parse import urldefrag
 from flask import Blueprint, redirect, flash, request, render_template, current_app
 from flask_user import current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
-from uscope.models import LinkedInTokens
-from ..helper import data_from_url, get_key, log
-from ..db import db_session
-
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -19,6 +15,11 @@ from flask_user import current_user
 import requests
 import urllib
 import json
+
+from ..models import LinkedInTokens
+from ..helper import data_from_url, get_key, log
+from ..db import db_session
+
 url = "https://linkedin.com"
 
 

@@ -1,41 +1,38 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Float, Boolean, Date, DateTime, table
-from sqlalchemy import Table, MetaData, inspect
+from sqlalchemy import Column, ForeignKey, Integer, String, Float, Boolean, Date, DateTime
 from sqlalchemy.orm import declarative_base, relationship
 from flask_user import UserMixin
-from .db import Base, engine
+from .db import Base
 
 
 class ConfigKeys(Base):
     __tablename__ = "configkeys"
 
-    id = Column('id', Integer, primary_key=True)
-    keyname = Column('keyname', String)
-    keyvalue = Column('keyvalue', String)
+    id = Column(Integer, primary_key=True)
+    keyname = Column(String)
+    keyvalue = Column(String)
 
     def __init__(self, keyname = None, keyvalue= None):
         self.keyname = keyname
         self.keyvalue = keyvalue
 
-    def create_table(self):
-        table = Table(self.__tablename__, ConfigKeys.id, ConfigKeys.keyname, ConfigKeys.keyvalue)
-        table.create(engine)
-
 class Place(Base):
     __tablename__ = "place"
 
-    id = Column('id', Integer, primary_key=True)
-    placename = Column('placename', String)
-    placegoogleid = Column('placegoogleid', Integer, ForeignKey('placegoogle.id', ondelete='CASCADE'))
-    vicinity = Column('vicinity', String)
-    street1 = Column('street1', String)
-    street2 = Column('street2', String)
-    suburb = Column('suburb', String)
-    postcode = Column('postcode', String)
-    placestate = Column('placestate', String)
-    phonenumber = Column('phonenumber', String)
-    pluscode = Column('pluscode', String)
-    lastchecked = Column('lastchecked', Date)
+    id = Column(Integer, primary_key=True)
+    placename = Column(String)
+    placegoogleid = Column(Integer, ForeignKey('placegoogle.id', ondelete='CASCADE'))
+    vicinity = Column(String)
+    street1 = Column(String)
+    street2 = Column(String)
+    suburb = Column(String)
+    postcode = Column(String)
+    placestate = Column(String)
+    phonenumber = Column(String)
+    pluscode = Column(String)
+    lastchecked = Column(Date)
     
+    
+
     def __init__(self, placename=None, placegoogleid=None, vicinity=None, street1=None, street2=None, suburb=None, postcode=None,
         placestate=None, phonenumber=None, pluscode=None, lastchecked=None):
         
@@ -51,23 +48,18 @@ class Place(Base):
         self.pluscode = pluscode
         self.lastchecked = lastchecked
         
-    def create_table(self):
-        table = Table(self.__tablename__, self.id, self.placename, self.placegoogleid, self.vicinity,
-               self.street1, self.street2, self.suburb, self.postcode, self.placestate, self.phonenumber,
-               self.pluscode, self.lastchecked)
-        table.create(engine)
 
 class PlaceGoogle(Base):
     __tablename__ = "placegoogle"
 
-    id = Column('id', Integer, primary_key=True)
-    placeid = Column('placeid', Integer, ForeignKey('place.id'))
-    business_status = Column('business_status', Integer)
-    lat = Column('lat', Float)
-    lng = Column('lng', Float)
-    rating = Column('rating', Float)
-    user_ratings_total = Column('user_ratings_total', Integer)
-    google_place_id = Column('google_place_id', String)
+    id = Column(Integer, primary_key=True)
+    placeid = Column(Integer, ForeignKey('place.id'))
+    business_status = Column(Integer)
+    lat = Column(Float)
+    lng = Column(Float)
+    rating = Column(Float)
+    user_ratings_total = Column(Integer)
+    google_place_id = Column(String)
     mapurl = Column(String)
     website = Column(String)
 
@@ -84,11 +76,6 @@ class PlaceGoogle(Base):
         self.mapurl = mapurl
         self.website = website
 
-    def create_table(self):
-        table = Table(self.__tablename__, self.id, self.placeid, self.business_status, self.lat, self.lng, self.rating,
-            self.user_ratings_total, self.google_place_id, self.mapurl, self.website )
-        table.create(engine)
-
 class KeyWords(Base):
     __tablename__ = "keywords"
 
@@ -99,10 +86,6 @@ class KeyWords(Base):
     def __init__(self, placeid=None, keyword=None):
         self.placeid = placeid
         self.keyword = keyword
-
-    def create_table(self):
-        table = Table(self.__tablename__, self.id, self.placeid, self.keyword)
-        table.create(engine)
 
 class JobList(Base):
     __tablename__ = "joblist"
@@ -124,10 +107,6 @@ class JobList(Base):
         self.searchterms = searchterms
         self.placecount = placecount
         self.complete = complete
-    
-    def create_table(self):
-        table = Table(self.__tablename__, self.id, self.pointaddress, self.radius, self.lat, self.lng, self.searchterms, self.placecount, self.complete)
-        table.create(engine)
 
 class JobResults(Base):
     __tablename__ = "jobresults"
@@ -140,10 +119,6 @@ class JobResults(Base):
         self.placeid = placeid
         self.joblistid = joblistid
 
-    def create_table(self):
-        table = Table(self.__tablename__, self.id, self.placeid, self.joblistid)
-        table.create(engine)
-
 class User(Base, UserMixin):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
@@ -155,28 +130,16 @@ class User(Base, UserMixin):
     last_name = Column(String(100, collation='NOCASE'), nullable=False, server_default='')
     roles = relationship('Role', secondary='user_roles')
 
-    def create_table(self):
-        table = Table(self.__tablename__, self.id, self.active, self.email, self.email_confirmed_at, self.password, self.first_name, self.last_name, self.roles)
-        table.create(engine)
-
 class Role(Base):
     __tablename__ = 'roles'
     id = Column(Integer(), primary_key=True)
     name = Column(String(50), unique=True)
-
-    def create_table(self):
-        table = Table(self.__tablename__, self.id, self.name)
-        table.create(engine)
 
 class UserRoles(Base):
     __tablename__ = 'user_roles'
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'))
     role_id = Column(Integer, ForeignKey('roles.id', ondelete='CASCADE'))
-
-    def create_table(self):
-        table = Table(self.__tablename__, self.id, self.user_id, self.role_id)
-        table.create(engine)
 
 
 class LinkedInTokens(Base):
@@ -195,9 +158,6 @@ class LinkedInTokens(Base):
         self.username = username
         self.password = password
 
-    def create_table(self):
-        table = Table(self.__tablename__, self.id, self.user_id, self.token, self.expires, self.username, self.password)
-        table.create(engine)
 
 
  

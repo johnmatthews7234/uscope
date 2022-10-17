@@ -17,7 +17,6 @@ CREATE TABLE configkeys (
 );
 
 
-
 -- Table: joblist
 DROP TABLE IF EXISTS joblist;
 
