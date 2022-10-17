@@ -20,7 +20,7 @@ import requests
 import urllib
 import json
 url = "https://linkedin.com"
-driver = webdriver.Chrome()
+
 
 bp = Blueprint('linkedin', __name__, url_prefix='/linkedin')
 
@@ -67,6 +67,7 @@ def get_code_request():
 def test_login(username, password):
     output = False
     url = 'https://www.linkedin.com/'
+    driver = webdriver.Chrome()
     driver.delete_all_cookies()
     driver.get(url)
     if "Log In" in driver.title:
@@ -86,6 +87,7 @@ def test_login(username, password):
 
 class linkedin_search:
     logged_in = False
+    driver = webdriver.Chrome()
     
     def __init__(self, company_name, url ):
         self.login()
@@ -95,34 +97,35 @@ class linkedin_search:
     def login(self):
         if self.logged_in:
             return
-        driver.get(url)
-        if "Log in" not in driver.title:
+        
+        self.driver.get(url)
+        if "Log in" not in self.driver.title:
             username = get_key("linkedin_user")
             password = get_key("linkedin_password")
             if (username == "") or (password == ""):
                 raise Exception('No LinkedIn login data was found.  Go configure that')
-            username_input = driver.find_element(By.ID, "session_key")
+            username_input = self.driver.find_element(By.ID, "session_key")
             username_input.clear()
             username_input.send_keys(username)
-            password_input = driver.find_element(By.ID, "session_password")
+            password_input = self.driver.find_element(By.ID, "session_password")
             password_input.clear()
             password_input.send_keys(password)
             password_input.submit()
         else:
-            log
+            log('Erk.')
         self.logged_in = True 
 
     def search_companies(self, companyname):
-        driver.get(url + "/feed/")
-        search_button = driver.find_element(By.CLASS_NAME, "search-global-typehead__collapsed-search-button")
+        self.driver.get(url + "/feed/")
+        search_button = self.driver.find_element(By.CLASS_NAME, "search-global-typehead__collapsed-search-button")
         search_button.click()
-        search_input = driver.find_element(By.CLASS_NAME, "search-global-typeahead__input always-show-placeholder always-show-paceholder")
+        search_input = self.driver.find_element(By.CLASS_NAME, "search-global-typeahead__input always-show-placeholder always-show-paceholder")
         search_input.clear()
         search_input.send_keys(companyname)
         search_input.send_keys(Keys.RETURN)
-        company_filter = driver.find_element(By.XPATH, '//button[text()="Companies"]')
+        company_filter = self.driver.find_element(By.XPATH, '//button[text()="Companies"]')
         company_filter.click()
-        soup = BeautifulSoup(driver.page_source)
+        soup = BeautifulSoup(self.driver.page_source)
         urns = []
         for elem in soup.findall('div', class_='entity-result'):
             urns.append(elem['data-chameleon-result-urn'])

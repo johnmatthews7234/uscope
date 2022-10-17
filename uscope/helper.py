@@ -1,9 +1,10 @@
 from urllib import response
+from sqlalchemy import inspect
 import urllib.request
 import json
 
 from flask import request, current_app
-from .db import db_session
+from .db import db_session, engine
 from .models import ConfigKeys, KeyWords
 
 def data_from_url(full_url):
@@ -16,12 +17,15 @@ def data_from_url(full_url):
     return json_data
 
 def get_key(key_name):
-    ck = ConfigKeys.query.filter(ConfigKeys.keyname == key_name).first()
+    try:
+        ck = ConfigKeys.query.filter(ConfigKeys.keyname == key_name).first()
+    except:
+        raise Exception('Hello')
     if ck is not None:
         return ck.keyvalue
     else:
         return ""
-
+    
 def set_key(key_name, key_value):
     ck = ConfigKeys.query.filter(ConfigKeys.keyname == key_name).first()
     if ck is not None:

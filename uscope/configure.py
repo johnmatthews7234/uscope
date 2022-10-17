@@ -1,7 +1,7 @@
 
 from flask import Blueprint, flash, redirect, render_template, request
 from .models import ConfigKeys
-from .db import db_session
+from .db import db_session, init_db
 
 bp = Blueprint('config', __name__, url_prefix='/config')
 
@@ -38,5 +38,15 @@ def add():
         return redirect('/config')
     return  render_template('/configure/add.html')
     
-    
+@bp.route('/database', methods=('GET', 'POST',))
+def database_admin():
+    error = None
+
+    if request.method == 'POST':
+        match request.form['action']:
+            case 'create':
+                init_db()
+            case 'update':
+                update_tables()
+        
 
