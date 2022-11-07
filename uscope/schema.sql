@@ -10,10 +10,9 @@ BEGIN TRANSACTION;
 DROP TABLE IF EXISTS configkeys;
 
 CREATE TABLE configkeys (
-    id       INTEGER PRIMARY KEY AUTOINCREMENT,
-    keyname  TEXT    UNIQUE
-                     NOT NULL,
-    keyvalue TEXT    NOT NULL
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    keyname TEXT UNIQUE NOT NULL,
+    keyvalue TEXT NOT NULL
 );
 
 
@@ -110,49 +109,48 @@ CREATE TABLE placegoogle (
 -- Table: roles
 DROP TABLE IF EXISTS roles;
 
-CREATE TABLE roles (
-    id   INTEGER,
-    name TEXT    UNIQUE,
-    PRIMARY KEY (
-        id
-    )
+CREATE TABLE "roles" (
+	"id"	INTEGER,
+	"name"	TEXT UNIQUE,
+	PRIMARY KEY("id")
 );
 
 
 -- Table: user_roles
 DROP TABLE IF EXISTS user_roles;
 
-CREATE TABLE user_roles (
-    id      INTEGER,
-    user_id INTEGER REFERENCES users (id) ON DELETE CASCADE,
-    role_id INTEGER REFERENCES roles (id) ON DELETE CASCADE,
-    PRIMARY KEY (
-        id
-    )
+CREATE TABLE "user_roles" (
+	"id"	INTEGER,
+	"user_id"	INTEGER,
+	"role_id"	INTEGER,
+	FOREIGN KEY("user_id") REFERENCES "users"("id") ON DELETE CASCADE,
+	FOREIGN KEY("role_id") REFERENCES "roles"("id") ON DELETE CASCADE,
+	PRIMARY KEY("id")
 );
 
 
 -- Table: users
 DROP TABLE IF EXISTS users;
 
-CREATE TABLE users (
-    id                 INTEGER,
-    is_active          INTEGER NOT NULL
-                               DEFAULT 1,
-    email              TEXT    NOT NULL
-                               UNIQUE,
-    email_confirmed_at INTEGER,
-    password           TEXT    NOT NULL
-                               DEFAULT '',
-    first_name         TEXT    NOT NULL
-                               DEFAULT '',
-    last_name          TEXT    NOT NULL
-                               DEFAULT '',
-    PRIMARY KEY (
-        id
-    )
+CREATE TABLE "users" (
+	"id"	INTEGER,
+	"email"	TEXT NOT NULL UNIQUE,
+	"email_confirmed_at"	INTEGER,
+	"username"	TEXT NOT NULL UNIQUE,
+	"password"	TEXT NOT NULL,
+	"active"	INTEGER,
+	"first_name"	TEXT NOT NULL,
+	"last_name"	TEXT NOT NULL,
+	PRIMARY KEY("id")
 );
 
-
+CREATE TABLE "user_emails" (
+	"id"	INTEGER,
+	"user_id"	INTEGER,
+	"email"	TEXT NOT NULL UNIQUE,
+	"email_confirmed_at"	INTEGER,
+	"is_primary"	INTEGER NOT NULL DEFAULT 0,
+	PRIMARY KEY("id")
+);
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;
