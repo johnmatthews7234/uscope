@@ -37,7 +37,8 @@ def add():
             db_session.commit()
         return redirect('/config')
     return  render_template('/configure/add.html')
-    
+
+"""    
 @bp.route('/database', methods=('GET', 'POST',))
 def database_admin():
     error = None
@@ -48,5 +49,5 @@ def database_admin():
                 init_db()
             case 'update':
                 update_tables()
-        
+"""        
 
