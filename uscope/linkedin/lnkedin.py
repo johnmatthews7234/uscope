@@ -88,12 +88,15 @@ def test_login(username, password):
 
 class linkedin_search:
     logged_in = False
-    driver = webdriver.Chrome()
+    driver = None
     
     def __init__(self, company_name, url ):
+        if self.driver is None:
+            self.driver = webdriver.Chrome()
         self.login()
         for company in self.search_company(company_name):
             urllist = self.get_company_url(company)
+
 
     def login(self):
         if self.logged_in:
