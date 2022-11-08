@@ -17,7 +17,7 @@ import urllib
 import json
 
 from ..models import LinkedInTokens
-from ..helper import data_from_url, get_key, log
+from ..helper import data_from_url, get_key
 from ..db import db_session
 
 url = "https://linkedin.com"
@@ -28,7 +28,7 @@ bp = Blueprint('linkedin', __name__, url_prefix='/linkedin')
 @bp.route('getcode', methods=('GET', 'POST',))
 @login_required
 def send_code_request():
-    log('hello world')
+    current_app.logger.debug('hello world')
     if request.method == 'GET':
         return render_template('/linkedin/login.html')
     if not test_login(request.form['li_un'],request.form['li_pw']):
@@ -83,12 +83,13 @@ def test_login(username, password):
         if 'feed' in driver.current_url:
             output = True
         driver.get(url + 'm/logout')
+    del(driver)
     return output
 
 
 class linkedin_search:
     logged_in = False
-    driver = webdriver.Chrome()
+    #driver = webdriver.Chrome()
     
     def __init__(self, company_name, url ):
         self.login()

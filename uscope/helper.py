@@ -50,6 +50,8 @@ def log(log_text, level='debug'):
         current_app.logger.debug(log_text)
     elif level == 'info':
         current_app.logger.info(log_text)
+    elif level == 'warn':
+        current_app.logger.warn(log_text)
     else:
         current_app.logger.debug(f'{level} is not a logging level.  {log_text}')
 

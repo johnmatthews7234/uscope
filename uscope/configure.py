@@ -1,12 +1,14 @@
 
-from flask import Blueprint, flash, redirect, render_template, request
+from flask import Blueprint, flash, redirect, render_template, request, current_app
 from .models import ConfigKeys
 from .db import db_session, init_db
+from .helper import log
 
 bp = Blueprint('config', __name__, url_prefix='/config')
 
 @bp.route('/', methods=('GET', 'POST',))
 def configure():
+    current_app.logger.debug(__name__)
     config_records = ConfigKeys.query.all()
     if request.method == 'POST':
         for config_record in config_records:
@@ -22,6 +24,7 @@ def configure():
 
 @bp.route('/delete/<string:keyname>', methods=('GET',))
 def delete(keyname):
+    current_app.logger.debug(__name__)
     config_record = ConfigKeys.query.filter(ConfigKeys.keyname == keyname).first()
     db_session.delete(config_record)
     db_session.commit
@@ -30,7 +33,7 @@ def delete(keyname):
 
 @bp.route('/add', methods=('GET','POST',))
 def add():
-    error = None
+    current_app.logger.debug(__name__)
     if request.method == 'POST':
         if ConfigKeys.query.filter(ConfigKeys.keyname == request.form['keyname']).first() is None:
             db_session.add(ConfigKeys(request.form['keyname'], request.form['keyvalue']))
@@ -40,13 +43,13 @@ def add():
     
 @bp.route('/database', methods=('GET', 'POST',))
 def database_admin():
-    error = None
+    #TODO: Need to flesh this out with update tables.
+    current_app.logger.debug(__name__)
 
     if request.method == 'POST':
         match request.form['action']:
             case 'create':
                 init_db()
-            case 'update':
-                update_tables()
+
         
 

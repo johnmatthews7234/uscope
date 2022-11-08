@@ -1,5 +1,5 @@
 import os
-from flask import Flask, session, render_template
+from flask import Flask, session, render_template, current_app
 from flask_user import UserManager
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
@@ -10,6 +10,8 @@ import uscope.configure
 import uscope.linkedin.lnkedin
 import uscope.db
 from uscope.models import User
+from uscope.helper import log
+
 
 def create_app(test_config=None):
     app = Flask(__name__)
@@ -18,7 +20,6 @@ def create_app(test_config=None):
         app.config.from_pyfile('./config.py', silent=False)
     else:
         app.config.from_pyfile('/tests/config.py', silent=True)
-
     try:
         os.makedirs(app.instance_path)
     except OSError:
@@ -29,9 +30,9 @@ def create_app(test_config=None):
     metadata.create_all()
     user_manager = UserManager(app, SQLAlchemy(app), UserClass=User)
     
-
     @app.route('/')
     def hello_world():
+        current_app.logger.debug('index')
         return render_template('index.html')
 
     app.register_blueprint(uscope.gsearch.bp)
@@ -42,10 +43,12 @@ def create_app(test_config=None):
     @app.teardown_appcontext
     def shutdown_session(exception=None):
         db_session.remove()
+        current_app.logger.debug('teardown complete')
     return app
 
 if __name__ == "__main__":
     app = create_app()
     app.debug = True
     app.run()
+    current_app.logger.info('App running')
 

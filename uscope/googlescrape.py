@@ -4,10 +4,11 @@ from datetime import datetime, timedelta, date
 import urllib.parse
 from openlocationcode import openlocationcode
 from sqlalchemy import func
+from flask import current_app
 
 from .models import PlaceGoogle, JobList, Place,  JobResults
 from .db import db_session
-from .helper import get_key, data_from_url, get_refresh_place_days
+from .helper import get_key, data_from_url, get_refresh_place_days, log
 
 
 apikey = get_key('googleapikey')
@@ -24,6 +25,7 @@ def street_address_to_lat_lng(street_address):
     input: string containing street address.
     output: dictionary of lat, lng
     '''
+    current_app.logger.debug(__name__)
 
     urldir = "/place/findplacefromtext/json?&inputtype=textquery&fields=geometry&" + apikey
     latlongdict = {
@@ -47,6 +49,7 @@ def _make_street1(address_object):
     '''
     Turns an address object into a single "vicinity string"
     '''
+    current_app.logger.debug(__name__)
     address_components = ['room', 'floor', 'street_number', 'route']
     address_dict = {}
     street1 = ''
@@ -65,6 +68,7 @@ def _make_street1(address_object):
     return street1
 
 def _get_address_component(address_object, componentname):
+    current_app.logger.debug(__name__)
     return_value = ''
     for entry in address_object:
         if componentname in entry['types']:
@@ -78,6 +82,7 @@ class google_search:
     location = dict()
 
     def __init__(self, location, radius, keyword=''):
+        current_app.logger.debug(__name__)
         if type(location) is str:
             self.location = street_address_to_lat_lng(location)
         else:
@@ -92,6 +97,7 @@ class google_search:
         returns an array of google place ids
         '''
         #mylocation = street_address_to_lat_lng(self.location)
+        current_app.logger.debug(__name__)
         urldir = '/place/nearbysearch/json?'
         urldir += apikey
         urldir += '&location=' + str(self.location['lat']) + ',' + str(self.location['lng'])
