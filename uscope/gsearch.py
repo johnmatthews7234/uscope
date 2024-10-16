@@ -48,7 +48,7 @@ def gsearch():
         try:
             my_google_search = google_search(address, radius,keyword)
             google_place_list = my_google_search.get_google_id_list()
-            google_thread = threading.Thread(target=my_google_search.get_place_id_list, kwargs={'job_number': job_id, 'filter' : filter})
+            google_thread = threading.Thread(target=my_google_search.get_place_id_list, kwargs={'job_number': job_id, 'filter' : True})
             google_thread.start()
             job_dict['count'] = len(google_place_list)
             my_job.placecount = len(google_place_list)
@@ -98,7 +98,7 @@ def download_report(job_number):
     converter = Converter()
     converter.convert(data, Writer(mem))
     mem.seek(0)
-    return_file = send_file(mem, attachment_filename='uscope.xlsx', as_attachment=True, cache_timeout=0)
+    return_file = send_file(mem, download_name='uscope.xlsx', as_attachment=True)
     return_file.mimetype = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     return return_file
 

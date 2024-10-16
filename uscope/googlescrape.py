@@ -5,7 +5,7 @@ import urllib.parse
 from openlocationcode import openlocationcode
 from sqlalchemy import func
 
-from .models import PlaceGoogle, JobList, Place,  JobResults
+from .models import PlaceGoogle, JobList, Place,  JobResults, KeyWords
 from .db import db_session
 from .helper import get_key, data_from_url, get_refresh_place_days
 
@@ -113,9 +113,9 @@ class google_search:
         
     def nearby_search_nextpage(self, token, sleeptime=3):
         '''
-        Gets a list of restaraunt from a next page token
+        Gets a list of places from a next page token
         input: string containing token
-        output: list of restaraunt dictionaries
+        output: list of places dictionaries
         '''
         urldir = "&".join( ('/place/nearbysearch/json?pagetoken=' + token, apikey,))
         sleep(sleeptime)
@@ -133,7 +133,7 @@ class google_search:
             return []
         return self.googleidlist
 
-    def get_place_id_list(self, job_number=0, filter=False):
+    def get_place_id_list(self, job_number=0, filter=True):
         if len(self.placeidlist) > 0:
             return self.placeidlist
         for googleid in self.googleidlist:
@@ -280,9 +280,6 @@ class googleplace:
     def get_placename(self):
         return self.placerecord.placename
 
-    def set_yelpplace(self, yelpplaceid):
-        self.placerecord.yelpplaceid = yelpplaceid
-
     def set_jobnumber(self, jobnumber):
         if self.get_placeid() == 0:
             return
@@ -304,7 +301,22 @@ class googleplace:
     def get_pluscode(self):
         mylocation = self.get_location()
         return openlocationcode.encode(mylocation['lat'], mylocation['lng'])
-        
+
+    def set_categories(self):
+        if self.myjson is None:
+            self.get_place_details()
+        if (self.myjson is not None) and ('result' in self.myjson):
+            types = self.myjson['result']['types']
+            for mytype in types:
+                add_type_to_place(self.get_placeid(), mytype)        
     
 
 
+def add_type_to_place(placeid, mytype):
+    if placeid == 0:
+        return
+    my_type_record = KeyWords.query.filter(KeyWords.placeid == placeid, KeyWords.keyword == mytype).first()
+    if my_type_record is None:
+        keyword = KeyWords(placeid, mytype)
+        db_session.add(keyword)
+    db_session.commit()
